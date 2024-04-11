@@ -18,6 +18,19 @@ def filter_datum(fields: List[str], redaction: str,
     return message
 
 
+def get_logger() -> logging.logger:
+    """ function that takes no arguments and returns a logging.Logger object"""
+    logger = logging.getLogger("user_data")
+    logging.setLevel(logging.INFO)
+    logging.propagate = False
+
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(RedactingFormatter(list(PII_FIELDS)))
+    logger.addHandler(stream_handler)
+
+    return logger
+
+
 class RedactingFormatter(logging.Formatter):
     """
     Redacting Formatter class for filtering PII fields
