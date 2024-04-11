@@ -4,6 +4,8 @@
 import logging
 from typing import List
 import re
+from os import environ
+import mysql.connector
 
 # fields to be redacted
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
@@ -29,6 +31,20 @@ def get_logger() -> logging.Logger:
     logger.addHandler(stream_handler)
 
     return logger
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """connect to a secure holberton database to read a users table"""
+    username = environ.get("PERSONAL_DATA_DB_USERNAME", "root")
+    password = environ.get("PERSONAL_DATA_DB_PASSWORD", "")
+    host = environ.get("PERSONAL_DATA_DB_HOST", "localhost")
+    db_name = environ.get("PERSONAL_DATA_DB_NAME")
+
+    connectn = mysql.connector.connection.MySQLConnection(user=username,
+                                                          password=password,
+                                                          host=host,
+                                                          database=db_name)
+    return connectn
 
 
 class RedactingFormatter(logging.Formatter):
