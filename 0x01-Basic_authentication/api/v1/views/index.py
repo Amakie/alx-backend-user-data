@@ -16,10 +16,10 @@ def status() -> str:
 
 app_views = Blueprint('app_views', __name__)
 
-@app_views.route('/unauthorized')
-def unauthorized():
+@app_views.route('/unauthorized', methods=['GET'], strict_slashes=False)
+def unauthorized() -> str:
     """endpoint for 401 errorhandler"""
-    abort(401)
+    abort(401, description=unauthorized)
 
 
 @app_views.route('/stats/', strict_slashes=False)
