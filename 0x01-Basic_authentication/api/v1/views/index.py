@@ -3,7 +3,19 @@
 """
 from flask import jsonify, abort
 from api.v1.views import app_views
-from flask import Blueprint, abort
+
+
+# unauthorized access
+@app_views.route('/unauthorized', methods=['GET'], strict_slashes=False)
+def unauthorized() -> str:
+    """endpoint for unauthorized access"""
+    abort(401, description='Unauthorized')
+
+# forbidden
+@app_views.route('/forbidden', methods=['GET'], strict_slashes=False)
+def forbidden() -> str:
+    """endpoint for forbidden error"""
+    abort(403, description='Forbidden')
 
 
 @app_views.route('/status', methods=['GET'], strict_slashes=False)
@@ -13,13 +25,6 @@ def status() -> str:
       - the status of the API
     """
     return jsonify({"status": "OK"})
-
-app_views = Blueprint('app_views', __name__)
-
-@app_views.route('/unauthorized', methods=['GET'], strict_slashes=False)
-def unauthorized() -> str:
-    """endpoint for 401 errorhandler"""
-    abort(401, description='Unauthorized')
 
 
 @app_views.route('/stats/', strict_slashes=False)
